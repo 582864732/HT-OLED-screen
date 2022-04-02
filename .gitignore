@@ -3,3 +3,16 @@
 /sch/OLED.zip
 /sch/fp-info-cache
 
+/code/*.ASM
+/code/*.LST
+/code/*.OBJ
+
+code/code.CV
+code/code.DBG
+code/code.MAP
+code/code.MEM
+code/code.MTP
+code/code.TSK
+code/code.bin
+code/code.list
+code/code.pjw
