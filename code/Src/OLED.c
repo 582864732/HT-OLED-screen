@@ -188,3 +188,22 @@ void oled_show_string(uint8_t x, uint8_t y, uint8 ch[],uint8 reverse) //Êä³ö×Ö·û
   }
 
 }
+
+void oled_show_bmp(uint8_t x, uint8_t y,uint8_t *bmp,uint8 reverse)
+{
+	if(reverse){
+		oled_origin(x,y);
+		uint8 i=0;
+		while(bmp[i]!=0){
+			oled_data(~bmp[i]);
+			i++;
+		}
+	}else{
+		oled_origin(x,y);
+		uint8 i=0;
+		while(bmp[i]!=0){
+			oled_data(bmp[i]);
+			i++;
+		}
+	}
+}

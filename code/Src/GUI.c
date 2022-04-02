@@ -15,7 +15,7 @@ void GUI_Show(void)
 	static uint8 min_x,min_y,max_x,max_y;
 	oled_clear_area(0,0,40,2);
 	//oled_full(0);
-	TextStructure *text_temp = CurrentWindow->TextList;
+	LabelStructure *text_temp = CurrentWindow->TextList;
 	while(text_temp!=NULL){
 		if(text_temp->y<min_y) min_y = text_temp->y;
 		oled_show_string(text_temp->x,text_temp->y,text_temp->text,text_temp->reverse);
@@ -71,11 +71,4 @@ void KeyEvent(uint8 event)
 			break;
 		default:break;
 	}
-}
-
-
-
-void CustomizedLayerCallFunction(CustomizedLayerStructure *cl)
-{
-	return;
 }

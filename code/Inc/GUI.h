@@ -7,13 +7,15 @@
 #define CLICK 2
 #define BACK 3
 
-typedef struct TextStructure{
+//以OLED显示的逻辑，分辨率为128x8
+
+typedef struct LabelStructure{
 	uint8* text;
 	uint8 reverse;
 	uint8 x;
 	uint8 y;
- 	struct TextStructure *next_text;
-}TextStructure;
+ 	struct LabelStructure *next_text;
+}LabelStructure;
 
 typedef struct ButtonStructure{
 	uint8* text;
@@ -31,7 +33,7 @@ typedef struct CustomizedLayerStructure{
 }CustomizedLayerStructure;
 
 typedef struct WindowStructure{
-	TextStructure *TextList;
+	LabelStructure *TextList;
 	ButtonStructure *ButtonList;
 	CustomizedLayerStructure *CL_List;
 	ButtonStructure *CurrentButton;
