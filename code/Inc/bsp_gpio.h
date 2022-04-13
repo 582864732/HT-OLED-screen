@@ -13,9 +13,11 @@
 
 #define led1_on() led1=0
 #define led1_off() led1=1
+#define led1_toggle() led1=~led1
 
 #define led2_on() led2=0
 #define led2_off() led2=1
+#define led2_toggle() led2=~led2
 
 #define GInit() GPIO_Init()
 

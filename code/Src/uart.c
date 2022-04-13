@@ -1,4 +1,6 @@
 #include"uart.h"
+#include"oled.h"
+#include"bsp_gpio.h"
 
 //只使用UART0作为串口，更改寄存器改变配置
 void UART_Init(void)
@@ -38,9 +40,9 @@ void UART_Init(void)
 	f/(16(_brg0+1))
 	*/
 	_u0cr1 = 0b10000000;
-	_u0cr2 = 0b11001100;
+	_u0cr2 = 0b11101100;
 	
-	_brg0 = 17; // 11059200/(64*18) = 9600
+	_brg0 = 5; // 11059200/(64*18) = 9600
 	
 	//在_u0cr1中
 	_uarten0 = 1;
@@ -63,11 +65,19 @@ void UART_SendByte(uint8 byte)
 	_ur0e = 1;
 }
 
-void UART_SendString(uint8 *string,uint32 length)
+void UART_SendStringL(uint8 *string,uint32 length)
 {
 	uint8 i=0;
 	for(;i<length;i++){
 		UART_SendByte(string[i]);
+	}
+}
+
+void UART_SendString(uint8 *string)
+{
+	uint8 i=0;
+	while(string[i]!=0){
+		UART_SendByte(string[i++]);
 	}
 }
 
@@ -80,10 +90,22 @@ void UART_SendNum(uint32 num)
 		ch[i--] = num%10+0x30;
 		num=num/10;
 	}while(num!=0);
-	UART_SendString(ch+i+1,9-i);
+	UART_SendStringL(ch+i+1,9-i);
 }
 
-uint16 Rcv_Time_Counter=0;
+void UART_SendStrings(uint8 **strs,uint8 length)
+{
+	uint8 i=0;
+	for(;i<length;i++){
+		UART_SendString(strs[i]);
+	}
+}
+
+
+extern uint8 rx_data[128];
+extern uint8 counter;
+extern uint8 function_receive_flag;
+extern uint8 receive_flag;
 void __attribute((interrupt(0x3c))) UART_Receive(void)
 {
 	GCC_NOP();
@@ -94,20 +116,16 @@ void __attribute((interrupt(0x3c))) UART_Receive(void)
 			asm("lmov a,___txr_rxr0");	//read RXR0 register to clear RXIF0 bit
 		}else
 		{
-			Rcv_Time_Counter=0;
 			while(_rxif0==0);
-			_ph0 = ~_ph0;
-			/*
-			if(Data_Counter<16)
+			if(function_receive_flag==0&&counter==0) receive_flag = 1;
+			if(counter==128)
 			{
-				Rcv_Data[Data_Counter] = _txr_rxr0;	
-				Data_Counter++;
-			}else
-			{
-				Data_Counter=0;
-				Rcv_Data[Data_Counter] = _txr_rxr0;	
+				uint8 temp = _txr_rxr0;
+				_ur0f = 0;
+				return;
 			}
-			*/
+			rx_data[counter] = _txr_rxr0;
+			counter++;
 		}
 		_ur0f=0;
 	}

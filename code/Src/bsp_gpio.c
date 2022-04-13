@@ -17,13 +17,13 @@ void GPIO_Init(void)
 	_int2e = 1;
 	_int2f = 0;
 	//int3
-	_pcs1 = 0;
-	_pcc7 = 1;
-	_int3e = 1;
-	_int3f = 0;
+	// _pcs1 = 0b01000000;
+	// _pcc7 = 1;
+	// _int3e = 1;
+	// _int3f = 0;
 	
 	//设置为上升沿中断
-	_integ = 0b01010101;
+	_integ = 0x55;
 	
 	//led1,2
 	_pcc0 = 0;
@@ -53,9 +53,4 @@ void __attribute((interrupt(0x30))) INT2_ISR(void)
 	_int2f = 0;	
 }
 
-void __attribute((interrupt(0x34))) INT3_ISR(void)
-{
-	if(int3==0)
-		KeyEvent(BACK);
-	_int3f = 0;
-}
+
