@@ -14,11 +14,17 @@
 void oled_full(uint8_t data); //全屏填充
 void oled_init(void); //初始化
 
+void oled_clear_line(uint8 x,uint8 y,uint8 length);
 void oled_clear_area(uint8 x,uint8 y,uint8 width,uint8 height);
 void oled_show_char(uint8_t x,uint8_t y,uint8_t chr);//单字节
 void oled_show_string(uint8_t x, uint8_t y, uint8 ch[],uint8 reverse); //输出字符串
 
 void oled_show_bmp(uint8_t x, uint8_t y,uint8_t *bmp,uint8 reverse);//输出图像
 void oled_clear(); //清屏
+
+void oled_data(uint8_t data);
+void oled_cmd(uint8_t i2c_cmd);
+void oled_origin(uint8_t x,uint8_t y);
+unsigned char getF6X8(uint8 c,uint8 i);
 
 #endif //STM32F401_TEST_CORE_INC_OLED_H_

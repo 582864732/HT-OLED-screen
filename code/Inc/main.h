@@ -18,12 +18,21 @@
 #define CONNECT_TIMEOUT 4
 #define PASSWORD_ERROR 5
 #define AP_NOT_FOUND 6
+#define ALREADY_CONNECTED 7
+#define SERVER_NOT_CONNECTED 8
 
 #define toInt(str) atoi(str)
 
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
+
+typedef struct{
+	uint8 windspeed;
+	uint8 temperature;
+	uint8 mode;
+	uint8 on;
+}ControllerStruct;
 
 uint8* toString(uint8 num);
 

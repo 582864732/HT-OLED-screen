@@ -13,7 +13,8 @@
 /*---------------------------------*/
 
 /*---------------------------------*/
-static void oled_cmd(uint8_t i2c_cmd) //发送指令
+//140us
+void oled_cmd(uint8_t i2c_cmd) //发送指令
 {
   IIC_Start();
   IIC_SendByte(OLED_ADD);
@@ -24,7 +25,8 @@ static void oled_cmd(uint8_t i2c_cmd) //发送指令
   IIC_WaitAck();
   IIC_Stop();
 }
-static void oled_data(uint8_t data) //发送数据
+//140us
+void oled_data(uint8_t data) //发送数据
 {
   IIC_Start();
   IIC_SendByte(OLED_ADD);
@@ -35,7 +37,7 @@ static void oled_data(uint8_t data) //发送数据
   IIC_WaitAck();
   IIC_Stop();
 }
-static void oled_origin(uint8_t x,uint8_t y) //设置起始点位置
+void oled_origin(uint8_t x,uint8_t y) //设置起始点位置
 {
   oled_cmd(0xb0+y);
   oled_cmd(((x&0xf0)>>4)|0x10);
@@ -59,6 +61,15 @@ void oled_full(uint8_t data) //全屏填充
 void oled_clear() //清屏
 {
   oled_full(0x00);
+}
+
+void oled_clear_line(uint8 x,uint8 y,uint8 length)
+{
+	oled_origin(x,y);
+	uint8 end_x = x+length*8;
+	for(;x<end_x;x++){
+		oled_data(0x00);
+	}
 }
 
 void oled_clear_area(uint8 x,uint8 y,uint8 width,uint8 height)
@@ -130,7 +141,7 @@ static unsigned char getF8X16(uint16 index)
 }
 */
 
-static unsigned char getF6X8(uint8 c,uint8 i)
+unsigned char getF6X8(uint8 c,uint8 i)
 {
 	if(c<21) return F6x8_1[c][i];
 	else if(c<42) return F6x8_2[c-21][i];
@@ -147,7 +158,6 @@ void oled_show_char(uint8_t x,uint8_t y,uint8_t chr) //单字节
 	if(x>128-1){x=0;y=y+2;}
 	oled_origin(x,y);
 	for(i=0;i<6;i++)
-	  //oled_data(F6x8[c][i]);
 	  oled_data(getF6X8(c,i));
 }
 
